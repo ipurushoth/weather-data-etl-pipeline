@@ -3,3 +3,13 @@
 venv/
 __pycache__/
 *.pyc
+
+# Airflow
+airflow/.env
+airflow/logs/
+airflow/config/
+airflow/plugins/
+
+# Generated weather data
+data/raw/
+data/processed/
