@@ -1,6 +1,7 @@
 from airflow.sdk import DAG
 from airflow.providers.standard.operators.bash import BashOperator
-from datetime import datetime
+from datetime import datetime, timedelta
+
 
 with DAG(
     dag_id="weather_etl_pipeline",
@@ -8,21 +9,25 @@ with DAG(
     schedule="@daily",
     catchup=False,
     tags=["weather", "etl"],
+    default_args={
+        "retries": 2,
+        "retry_delay": timedelta(minutes=5),
+    },
 ) as dag:
 
     extract = BashOperator(
         task_id="extract_weather",
-        bash_command="cd /opt/airflow/project && python src/extract.py"
+        bash_command="cd /opt/airflow/project && python src/extract.py",
     )
 
     transform = BashOperator(
         task_id="transform_weather",
-        bash_command="cd /opt/airflow/project && python src/transform.py"
+        bash_command="cd /opt/airflow/project && python src/transform.py",
     )
 
     load = BashOperator(
         task_id="load_weather",
-        bash_command="cd /opt/airflow/project && python src/load.py"
+        bash_command="cd /opt/airflow/project && python src/load.py",
     )
 
     extract >> transform >> load

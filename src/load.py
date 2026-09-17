@@ -23,11 +23,13 @@ def load_weather_data():
 
     for _, row in df.iterrows():
 
+        
         cursor.execute(
             """
             INSERT INTO weather_data
             (time, temperature, humidity, pressure, wind_speed, weather_code)
             VALUES (%s, %s, %s, %s, %s, %s)
+            ON CONFLICT (time) DO NOTHING
             """,
             (
                 row["time"],
