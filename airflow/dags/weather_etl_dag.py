@@ -27,7 +27,7 @@ with DAG(
 
     load = BashOperator(
         task_id="load_weather",
-        bash_command="cd /opt/airflow/project && python src/load.py",
+        bash_command="cd /opt/airflow/project && DB_HOST=host.docker.internal python src/load.py",
     )
 
     extract >> transform >> load
